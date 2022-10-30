@@ -6,12 +6,13 @@ from django.dispatch import receiver
 # create custom profile table,to store additional infos and use signals to auto create Profile on user creation
 
 
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)    
     creation = models.DateField(auto_now_add = True)
 
     def __str__(self):
-        return f"{self.user.username} created {self.creation}"
+        return f"{self.user.username} created {self.creation} email {self.user.email}"
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
