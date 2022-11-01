@@ -83,7 +83,7 @@ def generate_new_workout(request):
 
 @api_view(['POST'])
 def generate_new_exercise(request, pk):
-    thisWorkout = Workout.objects.get(id=pk)
+    #thisWorkout = Workout.objects.get(id=pk)
 
     if request.data.kind == "weight":
         serializer = WeightExercisesSerializer(data=request.data)
@@ -101,5 +101,33 @@ def generate_new_exercise(request, pk):
         return Response({"ERROR": "Exercise could not be saved!"})
 
 @api_view(['POST'])
-def edit_existing_exercise(request, pk):
-    pass
+def edit_existing_weight_exercise(request, pk):
+    exercise = WeightExercises.objects.get(id=pk)
+    serializer=WeightExercisesSerializer(instance=exercise, data=request.data)
+    if serializer.is_valid:
+        serializer.save()
+        return Response(serializer.data)
+
+@api_view(['POST'])
+def edit_existing_cardio_exercise(request, pk):
+    exercise = CardioExercises.objects.get(id=pk)
+    serializer=CardioExerciseSerializer(instance=exercise, data=request.data)
+    if serializer.is_valid:
+        serializer.save()
+        return Response(serializer.data)
+
+@api_view(['POST'])
+def edit_existing_profile(request, pk):
+    profile = Profile.objects.get(id =pk)
+    serializer=ProfileSerializer(instance=profile, data=request.data)
+    if serializer.is_valid:
+        serializer.save()
+        return Response(serializer.data)
+        
+@api_view(['DELETE'])
+def delete_profile(request, pk):
+    profile = Profile.objects.get(id=pk)
+    user = profile.user
+    user.delete()
+    profile.delete()
+

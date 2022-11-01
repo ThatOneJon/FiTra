@@ -15,7 +15,6 @@ class ProfileSerializer(serializers.ModelSerializer):
         #fields = '__all__'
         fields = ('creation', 'user',)
 
-
 class WorkoutSerializer(serializers.ModelSerializer):
     class Meta:
         model = Workout
@@ -30,3 +29,6 @@ class CardioExerciseSerializer(serializers.ModelSerializer):
     class Meta:
         model=CardioExercises
         fields='__all__'
+
+class LoginSerializer(serializers.ModelSerializer):
+    pass
