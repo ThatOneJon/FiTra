@@ -60,3 +60,22 @@ def get_Workout_Data(request, pk):
         return Response({"ERROR" : "No Matching workout"})
     
 # POSTING AP DATA -------------------------------------------------- <------
+
+@api_view(['POST'])
+def generate_new_user(request):
+    serializer = UserSerializer(data=request.data)
+
+    if serializer.is_valid():
+        serializer.save()
+
+        return Response(serializer.data)
+
+
+@api_view(['POST'])
+def generate_new_workout(request):
+    serializer = WorkoutSerializer(data = request.data)
+
+    if serializer.is_valid():
+        serializer.save()
+
+        return Response(serializer.data)

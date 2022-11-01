@@ -62,5 +62,4 @@ class CardioExercises(models.Model):
 
     def __str__(self):
         return f"{self.kind} from {self.workout.date}"
-
 #Used ADMIN INLINES to display the exercises inside corresponding Workout list!
