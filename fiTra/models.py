@@ -41,25 +41,24 @@ class Workout(models.Model):
         return f"{self.kind} from {self.date}"
 
 #creation of an abstract Exercise class with specific weight and cardio classes inheriting
-class Exercises(models.Model):
-    workout = models.ForeignKey(Workout, on_delete = models.CASCADE)
+ 
 
-    class Meta:
-        abstract = True 
-
-class WeightExercises(Exercises):
+class WeightExercises(models.Model):
     exercise = models.CharField(max_length = 200) 
     weight = models.IntegerField()
     sets = models.IntegerField()
     repetitions = models.IntegerField()
+    weightWorkout = models.ForeignKey(Workout, on_delete = models.CASCADE,related_name="weightWorkout")
+
 
     def __str__(self):
         return f"{self.exercise} from {self.workout.date}"
 
-class CardioExercises(Exercises):
+class CardioExercises(models.Model):
     kind = models.CharField(max_length = 200, default ="running")
     distance = models.IntegerField()
     duration = models.IntegerField()
+    cardioWorkout = models.ForeignKey(Workout, on_delete = models.CASCADE,related_name="cardioWorkout")
 
     def __str__(self):
         return f"{self.kind} from {self.workout.date}"

@@ -16,3 +16,14 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         #fields = '__all__'
         fields = ('creation', 'user',)
+
+
+class WorkoutSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Workout
+        fields='__all__'
+
+class WeightExercisesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WeightExercises
+        fields='__all__'

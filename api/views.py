@@ -1,6 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .serializers import ProfileSerializer, UserSerializer
+from .serializers import ProfileSerializer, UserSerializer, WorkoutSerializer, WeightExercisesSerializer
 from fiTra.models import *
 
 #import the Response class in order to parse the data to Str -> pass in native python, cannot handle models
@@ -38,3 +38,13 @@ def get_Profile_Data(request, pk):
 
     else:
         return Response({"Error" :"No auth"})
+
+@api_view(['GET'])
+def get_Workout_Data(request, pk):
+    try:
+        return Response({"first":"1"})
+    except Workout.DoesNotExist:
+        return Response({"ERROR" : "No Matching workout"})
+    
+
+
