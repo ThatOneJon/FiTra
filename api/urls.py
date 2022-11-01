@@ -10,4 +10,5 @@ urlpatterns = [
     path('workout/<str:pk>', views.get_Workout_Data, name ="workoutData"),
     path('createUser/', views.generate_new_user, name ="createUser"),
     path('createWorkout/', views.generate_new_workout, name="createWorkout"),
+    path('createExercise/<str:pk>', views.generate_new_exercise, name="createExercise"),
 ]

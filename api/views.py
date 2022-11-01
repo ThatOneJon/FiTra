@@ -79,3 +79,27 @@ def generate_new_workout(request):
         serializer.save()
 
         return Response(serializer.data)
+
+
+@api_view(['POST'])
+def generate_new_exercise(request, pk):
+    thisWorkout = Workout.objects.get(id=pk)
+
+    if request.data.kind == "weight":
+        serializer = WeightExercisesSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+
+
+    elif request.data.kind == "cardio":
+        serializer = CardioExerciseSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+
+    else:
+        return Response({"ERROR": "Exercise could not be saved!"})
+
+@api_view(['POST'])
+def edit_existing_exercise(request, pk):
+    pass
