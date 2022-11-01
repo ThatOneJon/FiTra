@@ -27,3 +27,8 @@ class WeightExercisesSerializer(serializers.ModelSerializer):
     class Meta:
         model = WeightExercises
         fields='__all__'
+
+class CardioExerciseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=CardioExercises
+        fields='__all__'

@@ -16,3 +16,4 @@ class WorkoutAdmin(admin.ModelAdmin):
 admin.site.register(Profile)
 admin.site.register(Workout, WorkoutAdmin)
 admin.site.register(WeightExercises)
+admin.site.register(CardioExercises)

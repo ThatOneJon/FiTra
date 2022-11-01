@@ -48,7 +48,7 @@ class WeightExercises(models.Model):
     weight = models.IntegerField()
     sets = models.IntegerField()
     repetitions = models.IntegerField()
-    weightWorkout = models.ForeignKey(Workout, on_delete = models.CASCADE,related_name="weightWorkout")
+    workout = models.ForeignKey(Workout, on_delete = models.CASCADE,related_name="weightWorkout")
 
 
     def __str__(self):
@@ -58,7 +58,7 @@ class CardioExercises(models.Model):
     kind = models.CharField(max_length = 200, default ="running")
     distance = models.IntegerField()
     duration = models.IntegerField()
-    cardioWorkout = models.ForeignKey(Workout, on_delete = models.CASCADE,related_name="cardioWorkout")
+    workout = models.ForeignKey(Workout, on_delete = models.CASCADE,related_name="cardioWorkout")
 
     def __str__(self):
         return f"{self.kind} from {self.workout.date}"
