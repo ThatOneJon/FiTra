@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 
@@ -14,5 +14,11 @@ urlpatterns = [
     path('editProfile/<str:pk>', views.edit_existing_profile, name='editProfile'),
     path('editExercise/weight/<str:pk>', views.edit_existing_weight_exercise, name ='editWeight'),
     path('editExercise/cardio/<str:pk>', views.edit_existing_cardio_exercise, name ='editCardio'),
+    path('deleteProfile/<str:pk>', views.delete_profile, name ="deleteProfile"),
+    path('deleteExercise/<str:pk>', views.delete_exercise, name ="deleteExercise"),
+    path('deleteWorkout/<str:pk>', views.delete_workout, name="deleteWorkout"),
+
+    path('api-auth/', include('rest_framework.urls')),
+    #This adds login to the browseable url of the API
 
 ]

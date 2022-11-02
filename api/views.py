@@ -1,7 +1,9 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from rest_framework import permissions
 from .serializers import ProfileSerializer, UserSerializer, WorkoutSerializer, WeightExercisesSerializer, CardioExerciseSerializer
 from fiTra.models import *
+
 
 #import the Response class in order to parse the data to Str -> pass in native python, cannot handle models
 #import serializers in Order to serialize Models -> pass models to response 
@@ -131,3 +133,11 @@ def delete_profile(request, pk):
     user.delete()
     profile.delete()
 
+@api_view(['DELETE'])
+def delete_exercise(request, pk):
+    pass    
+
+@api_view(['DELETE'])
+def delete_workout(request, pk):
+    workout = Workout.objects.get(id=pk)
+    workout.delete()

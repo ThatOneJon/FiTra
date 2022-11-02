@@ -36,6 +36,7 @@ class Workout(models.Model):
     workoutQuality = models.CharField(max_length = 200, choices = workoutQualityChoices, default = "+")
     date = models.DateField(auto_now_add = True)
     kind = models.CharField(max_length= 200, choices = workoutKind)
+    owner = models.ForeignKey('auth.user', related_name = 'workouts', on_delete= models.CASCADE, default="test")
 
     def __str__(self):
         return f"{self.kind} from {self.date}"
