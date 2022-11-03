@@ -1,18 +1,24 @@
+from cmath import log
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import permissions
+from .permissions import is_owner_or_DENIED
 from .serializers import ProfileSerializer, UserSerializer, WorkoutSerializer, WeightExercisesSerializer, CardioExerciseSerializer
 from fiTra.models import *
+from django.contrib.auth.decorators import login_required
+
 
 
 #import the Response class in order to parse the data to Str -> pass in native python, cannot handle models
 #import serializers in Order to serialize Models -> pass models to response 
 #import decorators for api_view 
-
+#default permission classes in settings -> always have to be logged in to see, change or delete data
 
 #GETTING AP DATA --------------------------------------------- -->
 @api_view(['GET'])
 def api_Overview(request):
+    permission_classes = [is_owner_or_DENIED, ]
+
     api_Urls = {
         "GET_Profile" : "one",
         "CREATE_Profile" : "two",
@@ -24,6 +30,7 @@ def api_Overview(request):
     return Response(api_Urls)
 
 #this api view will return a user Profile and the serialized user data, fitting the profile 
+@login_required
 @api_view(['GET'])
 def get_Profile_Data(request, pk):
     if request.user.is_authenticated:
@@ -41,6 +48,7 @@ def get_Profile_Data(request, pk):
     else:
         return Response({"Error" :"No auth"})
 
+@login_required
 @api_view(['GET'])
 def get_Workout_Data(request, pk):
     try:
@@ -72,7 +80,7 @@ def generate_new_user(request):
 
         return Response(serializer.data)
 
-
+@login_required
 @api_view(['POST'])
 def generate_new_workout(request):
     serializer = WorkoutSerializer(data = request.data)
@@ -82,7 +90,7 @@ def generate_new_workout(request):
 
         return Response(serializer.data)
 
-
+@login_required
 @api_view(['POST'])
 def generate_new_exercise(request, pk):
     #thisWorkout = Workout.objects.get(id=pk)
@@ -102,6 +110,7 @@ def generate_new_exercise(request, pk):
     else:
         return Response({"ERROR": "Exercise could not be saved!"})
 
+@login_required
 @api_view(['POST'])
 def edit_existing_weight_exercise(request, pk):
     exercise = WeightExercises.objects.get(id=pk)
@@ -110,6 +119,7 @@ def edit_existing_weight_exercise(request, pk):
         serializer.save()
         return Response(serializer.data)
 
+@login_required
 @api_view(['POST'])
 def edit_existing_cardio_exercise(request, pk):
     exercise = CardioExercises.objects.get(id=pk)
@@ -118,6 +128,7 @@ def edit_existing_cardio_exercise(request, pk):
         serializer.save()
         return Response(serializer.data)
 
+@login_required
 @api_view(['POST'])
 def edit_existing_profile(request, pk):
     profile = Profile.objects.get(id =pk)
@@ -125,7 +136,8 @@ def edit_existing_profile(request, pk):
     if serializer.is_valid:
         serializer.save()
         return Response(serializer.data)
-        
+
+@login_required    
 @api_view(['DELETE'])
 def delete_profile(request, pk):
     profile = Profile.objects.get(id=pk)
@@ -133,10 +145,12 @@ def delete_profile(request, pk):
     user.delete()
     profile.delete()
 
+@login_required
 @api_view(['DELETE'])
 def delete_exercise(request, pk):
     pass    
 
+@login_required
 @api_view(['DELETE'])
 def delete_workout(request, pk):
     workout = Workout.objects.get(id=pk)
