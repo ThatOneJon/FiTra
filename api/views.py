@@ -1,13 +1,11 @@
 from cmath import log
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view
 from rest_framework import permissions
-from .permissions import is_owner_or_DENIED
 from .serializers import ProfileSerializer, UserSerializer, WorkoutSerializer, WeightExercisesSerializer, CardioExerciseSerializer
 from fiTra.models import *
 from django.contrib.auth.decorators import login_required
-
-
+from rest_framework.exceptions import PermissionDenied
 
 #import the Response class in order to parse the data to Str -> pass in native python, cannot handle models
 #import serializers in Order to serialize Models -> pass models to response 
@@ -31,9 +29,12 @@ def api_Overview(request):
 @login_required
 @api_view(['GET'])
 def get_Profile_Data(request, pk):
+
     if request.user.is_authenticated:
         #getting the right one by primary key
         profiles = Profile.objects.get(id=pk)
+        if profiles.user != request.user:
+            raise PermissionDenied
         #serializing the USER object from one to one field --> See one to one field docu
         serializer2 = UserSerializer(profiles.user, many=False)
         #serializing the profile
