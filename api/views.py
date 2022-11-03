@@ -1,6 +1,6 @@
 from cmath import log
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework import permissions
 from .permissions import is_owner_or_DENIED
 from .serializers import ProfileSerializer, UserSerializer, WorkoutSerializer, WeightExercisesSerializer, CardioExerciseSerializer
@@ -17,8 +17,6 @@ from django.contrib.auth.decorators import login_required
 #GETTING AP DATA --------------------------------------------- -->
 @api_view(['GET'])
 def api_Overview(request):
-    permission_classes = [is_owner_or_DENIED, ]
-
     api_Urls = {
         "GET_Profile" : "one",
         "CREATE_Profile" : "two",
@@ -50,7 +48,7 @@ def get_Profile_Data(request, pk):
 
 @login_required
 @api_view(['GET'])
-def get_Workout_Data(request, pk):
+def get_Workout_Data(request, pk):    
     try:
         theWorkout = Workout.objects.get(id=pk)
         serializerW = WorkoutSerializer(theWorkout, many=False)
