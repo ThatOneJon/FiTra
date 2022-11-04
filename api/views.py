@@ -17,12 +17,21 @@ from rest_framework.exceptions import PermissionDenied
 @api_view(['GET'])
 def api_Overview(request):
     api_Urls = {
-        "GET_Profile" : "one",
-        "CREATE_Profile" : "two",
-        "DELETE_Profile" :"three",
-        "GET_Workout" : "four",
-        "CREATE_Workout" : "five",
-        "DELETE_Workout" : "six"
+    'FITRA API' : 'ENDPOINT OVERVIEW',
+    'Create a new user' : 'createUser/',
+    'Profile - can only access own' : 'profile/<str:pk>',
+    'Edit your own profile' : 'editProfile/<str:pk>',
+    'Delete your profile' : 'deleteProfile/<str:pk>', 
+    'Create a new Workout for your user' : 'createWorkout/',
+    
+    'Show all Workouts' : '',
+
+    'Edit your Workout with id' : 'workout/<str:pk>',
+    'Create Exercise for a workout' : 'createExercise/<str:pk>',
+    'Edit weight Exercise' : 'editExercise/weight/<str:pk>',
+    'Edit cardio Exercise' : 'editExercise/cardio/<str:pk>',
+    'Delete an Exercise' : 'deleteExercise/<str:pk>',
+    'Delete a Workout with all its Exercises' : 'deleteWorkout/<str:pk>', 
     }
     return Response(api_Urls)
 
@@ -89,14 +98,12 @@ def generate_new_workout(request):
 
     if serializer.is_valid():
         serializer.save()
-
         return Response(serializer.data)
 
 @login_required
 @api_view(['POST'])
 def generate_new_exercise(request, pk):
     #thisWorkout = Workout.objects.get(id=pk)
-
     if request.data.kind == "weight":
         serializer = WeightExercisesSerializer(data=request.data)
         if serializer.is_valid():
