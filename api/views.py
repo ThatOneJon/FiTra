@@ -79,7 +79,14 @@ def get_Workout_Data(request, pk):
 
     except Workout.DoesNotExist:
         return Response({"ERROR" : "No Matching workout"})
-    
+@login_required
+@api_view(['GET']) 
+def get_all_Workouts(request):
+    allTheWorkouts = Workout.objects.filter(owner = request.user)
+    serializer = WorkoutSerializer(allTheWorkouts, many=True)
+    return Response(serializer.data)
+
+
 # POSTING AP DATA -------------------------------------------------- <------
 
 @api_view(['POST'])
@@ -97,7 +104,7 @@ def generate_new_workout(request):
     serializer = WorkoutSerializer(data = request.data)
 
     if serializer.is_valid():
-        serializer.save()
+        serializer.save(owner = request.user)
         return Response(serializer.data)
 
 @login_required
