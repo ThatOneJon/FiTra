@@ -1,4 +1,5 @@
 from cmath import log
+import re
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import permissions
@@ -52,6 +53,8 @@ def get_Profile_Data(request, pk):
 def get_Workout_Data(request, pk):    
     try:
         theWorkout = Workout.objects.get(id=pk)
+        if theWorkout.owner != request.user:
+            raise PermissionDenied
         serializerW = WorkoutSerializer(theWorkout, many=False)
         if theWorkout.kind == "weight":
             allExercises = theWorkout.weightWorkout.all()
@@ -110,27 +113,35 @@ def generate_new_exercise(request, pk):
         return Response({"ERROR": "Exercise could not be saved!"})
 
 @login_required
-@api_view(['POST'])
+@api_view(['GET','POST'])
 def edit_existing_weight_exercise(request, pk):
     exercise = WeightExercises.objects.get(id=pk)
+    if exercise.workout.owner != request.user:
+        raise PermissionDenied
     serializer=WeightExercisesSerializer(instance=exercise, data=request.data)
-    if serializer.is_valid:
+    if serializer.is_valid():
         serializer.save()
+        return Response(serializer.data)
+    else:
         return Response(serializer.data)
 
 @login_required
-@api_view(['POST'])
+@api_view(['GET','POST'])
 def edit_existing_cardio_exercise(request, pk):
     exercise = CardioExercises.objects.get(id=pk)
+    if exercise.workout.owner != request.user:
+        raise PermissionDenied
     serializer=CardioExerciseSerializer(instance=exercise, data=request.data)
-    if serializer.is_valid:
+    if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
 
 @login_required
-@api_view(['POST'])
+@api_view(['GET','POST'])
 def edit_existing_profile(request, pk):
     profile = Profile.objects.get(id =pk)
+    if profile.user != request.user:
+        raise PermissionDenied
     serializer=ProfileSerializer(instance=profile, data=request.data)
     if serializer.is_valid:
         serializer.save()
@@ -140,6 +151,8 @@ def edit_existing_profile(request, pk):
 @api_view(['DELETE'])
 def delete_profile(request, pk):
     profile = Profile.objects.get(id=pk)
+    if profile.user != request.user:
+        raise PermissionDenied
     user = profile.user
     user.delete()
     profile.delete()
@@ -153,4 +166,6 @@ def delete_exercise(request, pk):
 @api_view(['DELETE'])
 def delete_workout(request, pk):
     workout = Workout.objects.get(id=pk)
+    if workout.owner != request.user:
+        raise PermissionDenied
     workout.delete()
