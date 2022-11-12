@@ -1,6 +1,9 @@
 from django.urls import path, include
 from . import views
-
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 
 
@@ -21,6 +24,8 @@ urlpatterns = [
     path('deleteWorkout/<str:pk>', views.delete_workout, name="deleteWorkout"),
 
     path('api-auth/', include('rest_framework.urls')),
-    #This adds login to the browseable url of the API
 
+    #This adds login to the browseable url of the API
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
