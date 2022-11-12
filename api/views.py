@@ -24,7 +24,7 @@ def api_Overview(request):
     'Delete your profile' : 'deleteProfile/<str:pk>', 
     'Create a new Workout for your user' : 'createWorkout/',
     
-    'Show all Workouts' : '',
+    'Show all Workouts' : 'allWorkouts/',
 
     'Edit your Workout with id' : 'workout/<str:pk>',
     'Create Exercise for a workout' : 'createExercise/<str:pk>',
