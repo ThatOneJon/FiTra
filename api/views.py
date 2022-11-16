@@ -7,11 +7,30 @@ from .serializers import ProfileSerializer, UserSerializer, WorkoutSerializer, W
 from fiTra.models import *
 from django.contrib.auth.decorators import login_required
 from rest_framework.exceptions import PermissionDenied
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 #import the Response class in order to parse the data to Str -> pass in native python, cannot handle models
 #import serializers in Order to serialize Models -> pass models to response 
 #import decorators for api_view 
 #default permission classes in settings -> always have to be logged in to see, change or delete data
+
+# TOKEN CONFIG
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        # Add custom claims
+        token['username'] = user.username
+        # ...
+
+        return token
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
+
+
 
 #GETTING AP DATA --------------------------------------------- -->
 @api_view(['GET'])
